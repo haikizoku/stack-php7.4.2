@@ -1,0 +1,53 @@
+version: '3'
+services:
+  apache:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app_apache
+    volumes:
+      - ./:/var
+    networks:
+      - app
+    ports:
+      - 80:80
+#database configuration app
+  mysql_app:
+    image: mysql:5.7
+    container_name: app_mysql
+    networks:
+      - app
+    volumes:
+      - "./data/:/var/lib/mysql"
+      - "./dump/:/docker-entrypoint-initdb.d"
+      - "./config-docker/sql/:/etc/mysql/conf.d"
+    environment:
+      MYSQL_DATABASE: test
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - 3306:3306
+#pma configuration app
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: app_pma
+    networks:
+      - app
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: app_mysql
+
+#mailcatcher configuration( mail interceptor)
+  mailcatcher:
+    image: schickling/mailcatcher
+    networks:
+      - app
+    container_name: app_mailcatcher
+    ports:
+      - 1080:1080
+      - 1025:1025
+
+#define network
+networks:
+  app:
+    driver: bridge
