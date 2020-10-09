@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     container_name: app_apache
     volumes:
-      - ./:/var
+       - ./app:/var/www/app/
     networks:
       - app
     ports:
@@ -46,6 +46,17 @@ services:
     ports:
       - 1080:1080
       - 1025:1025
+# composer  installation   
+  composer_installation:
+    container_name: composer_installation
+    command: ["composer", "install"]
+    image: composer
+    volumes:
+      - ./app:/var/www/app/
+    working_dir: /var/www/app/
+    command: composer install
+    networks:
+      - app
 
 #define network
 networks:

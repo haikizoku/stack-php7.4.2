@@ -1,3 +1,4 @@
+
 FROM php:7.4-apache
 LABEL Author = "Norvene Gregory"
 LABEL Description = "Dockerfile pour héberger mon  application"
@@ -24,10 +25,13 @@ RUN apt-get install -y \
 
 RUN apt-get update && apt-get install -y vim
 
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 #copy apache conf
 COPY ./config-docker/apache/apache.conf /etc/apache2/sites-available/000-default.conf
 
 #copy  application
-COPY ./  /var
+COPY ./app  /var/www/app
 
-WORKDIR /var
+WORKDIR /var/www/app/
