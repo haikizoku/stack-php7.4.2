@@ -7,10 +7,9 @@ on:
   pull_request:
     branches:
       - symphonyStarter
-
-  cd:
+jobs:
+  ci:
     runs-on: ubuntu-latest
-    needs: ci
 
     steps:
       - uses: actions/checkout@v1
