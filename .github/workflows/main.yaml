@@ -1,4 +1,4 @@
-name: symphonyStarter
+name: symphonyStarter main
 
 on:
   push:
