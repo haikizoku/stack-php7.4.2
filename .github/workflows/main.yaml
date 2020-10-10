@@ -19,9 +19,9 @@ jobs:
         run: docker build -t back .
       - name: Tags
         run: |
-          docker tag symphonyStarter ${{ secrets.DOCKER_USER }}/symphonyStarter:${{ github.sha }}
-          docker tag symphonyStarter ${{ secrets.DOCKER_USER }}/symphonyStarter:latest
+          docker tag symphonyStarter ${{ secrets.DOCKER_USER }}/symphony_starter:${{ github.sha }}
+          docker tag symphonyStarter ${{ secrets.DOCKER_USER }}/symphony_starter:latest
       - name: Push
         run: |
-          docker push ${{ secrets.DOCKER_USER }}/symphonyStarter:${{ github.sha }}
-          docker push ${{ secrets.DOCKER_USER }}/symphonyStarter:latest
+          docker push ${{ secrets.DOCKER_USER }}/symphony_starter:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USER }}/symphony_starter:latest
