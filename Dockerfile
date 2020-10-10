@@ -15,9 +15,9 @@ RUN docker-php-ext-install pdo_mysql
 #=====================
 
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
-RUN apt-get install -y --no-install-recommends apt-utils
+RUN apt-get install -y --no-install-recommends apt-utils locales apt-utils git
 
-#install some base extensions
+#Install some base extensions
 RUN apt-get install -y \
         libzip-dev \
         zip \
@@ -25,13 +25,18 @@ RUN apt-get install -y \
 
 RUN apt-get update && apt-get install -y vim
 
+#Install local
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+    echo "fr_FR.UTF-8 UTF-8" >> /etc/locale.gen && \
+    locale-gen
+
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-#copy apache conf
+#Copy apache conf
 COPY ./config-docker/apache/apache.conf /etc/apache2/sites-available/000-default.conf
 
-#copy  application
+#Copy  application
 COPY ./app  /var/www/app
 
 WORKDIR /var/www/app/
