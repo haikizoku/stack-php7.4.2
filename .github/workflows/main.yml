@@ -1,4 +1,4 @@
-name: symphonyStarter  CI/CD
+name: symphonyStarter
 
 on:
   push:
