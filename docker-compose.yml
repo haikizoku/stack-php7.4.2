@@ -3,50 +3,72 @@ services:
   web-nginx:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile_nginx
     container_name: web-nginx
     volumes:
-      - ./app:/var/www/app
+      - ./app/:/var/www/app
+      - ./logs/nginx/:/var/log/nginx
     networks:
       - app
     ports:
       - "8080:80"
+#pma configuration app
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile_php
+    container_name: php
+    volumes:
+      - ./app/:/var/www/app
+    networks:
+      - app
+# composer  installation
+  composer_installation:
+    container_name: composer_installation
+    command: ["composer", "install"]
+    image: composer
+    volumes:
+      - ./app:/var/www/app/
+    working_dir: /var/www/app/
+    command: composer install
+    networks:
+      - app
 
-# #database configuration app
-#   mysql_app:
-#     image: mysql:5.7
-#     container_name: app_mysql
-#     networks:
-#       - app
-#     volumes:
-#       - "./data/:/var/lib/mysql"
-#       - "./dump/:/docker-entrypoint-initdb.d"
-#       - "./config-docker/sql/:/etc/mysql/conf.d"
-#     environment:
-#       MYSQL_DATABASE: test
-#       MYSQL_ROOT_PASSWORD: password
-#     ports:
-#       - 3306:3306
-# #pma configuration app
-#   phpmyadmin:
-#     image: phpmyadmin/phpmyadmin
-#     container_name: app_pma
-#     networks:
-#       - app
-#     ports:
-#       - 8080:80
-#     environment:
-#       PMA_HOST: app_mysql
-#
-# #mailcatcher configuration( mail interceptor)
-#   mailcatcher:
-#     image: schickling/mailcatcher
-#     networks:
-#       - app
-#     container_name: app_mailcatcher
-#     ports:
-#       - 1080:1080
-#       - 1025:1025
+#database configuration app
+  mysql_app:
+    image: mysql:5.7
+    container_name: app_mysql
+    networks:
+      - app
+    volumes:
+      - "./data/:/var/lib/mysql"
+      - "./dump/:/docker-entrypoint-initdb.d"
+      - "./config-docker/sql/:/etc/mysql/conf.d"
+    environment:
+      MYSQL_DATABASE: test
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - 3306:3306
+#pma configuration app
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: app_pma
+    networks:
+      - app
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: app_mysql
+
+#mailcatcher configuration( mail interceptor)
+  mailcatcher:
+    image: schickling/mailcatcher
+    networks:
+      - app
+    container_name: app_mailcatcher
+    ports:
+      - 1080:1080
+      - 1025:1025
 
 #define network
 networks:
