@@ -1,33 +1,4 @@
-FROM php:7.4-apache
+FROM nginx:latest
+COPY ./config-docker/nginx/default.conf /etc/nginx/conf.d/
 LABEL Author = "Norvene Gregory"
-LABEL Description = "Dockerfile pour héberger mon  application"
-
-RUN apt-get update
-RUN a2enmod rewrite
-RUN docker-php-ext-install mysqli
-RUN docker-php-ext-install pdo_mysql
-
-#=====================
-# Updates for debconf
-# Prevent message 'debconf: unable to initialize frontend: Dialog'
-# Prevent message 'debconf: delaying package configuration, since apt-utils is not installed'
-#=====================
-
-RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
-RUN apt-get install -y --no-install-recommends apt-utils
-
-#install some base extensions
-RUN apt-get install -y \
-        libzip-dev \
-        zip \
-  && docker-php-ext-install zip
-
-RUN apt-get update && apt-get install -y vim
-
-#copy apache conf
-COPY ./config-docker/apache/apache.conf /etc/apache2/sites-available/000-default.conf
-
-#copy  application
-COPY ./  /var
-
-WORKDIR /var
+LABEL Description = "Dockerfile pour héberger mon application"
